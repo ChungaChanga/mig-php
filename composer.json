@@ -1,0 +1,20 @@
+{
+    "name": "andrey/php-mig",
+    "require": {
+        "braintree/braintree_php": "6.24.0",
+        "vlucas/phpdotenv": "^5.6",
+        "avalara/avataxclient": "^25.7",
+      "ext-pdo": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Andrey\\PhpMig\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "andrey",
+            "email": "abaranchik@returnpro.com"
+        }
+    ]
+}

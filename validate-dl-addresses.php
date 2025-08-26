@@ -18,18 +18,23 @@ foreach ($appDbConn->getRowIterator() as  $card) {
     if ($card['validate_status'] != AppDb::STATUS_WAIT) {
         continue;
     }
-
-    $address = Address::fromJson($card['dl_address']);
-    $res = $avalaraClient->resolveAddress($address->line1, $address->line2, $address->line3,
-        $address->city, $address->region, $address->postalCode, $address->country);
-
-    if (!empty($res->messages)) {
+    if (empty($card['dl_address'])) {
         $status = AppDb::STATUS_ERR;
-        $comment  =  json_encode($res->messages);
+        $comment  =  'empty dl address';
     } else {
-        $status = AppDb::STATUS_DONE;
-        $comment = null;
+        $address = Address::fromJson($card['dl_address']);
+        $res = $avalaraClient->resolveAddress($address->line1, $address->line2, $address->line3,
+            $address->city, $address->region, $address->postalCode, $address->country);
+
+        if (!empty($res->messages)) {
+            $status = AppDb::STATUS_ERR;
+            $comment  =  json_encode($res->messages);
+        } else {
+            $status = AppDb::STATUS_DONE;
+            $comment = null;
+        }
     }
+
 
     $appDbConn->updateValidateStatusAndComment($card['id'], $status, $comment);
 }

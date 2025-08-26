@@ -24,3 +24,4 @@ foreach ($appDbConn->getRowIterator() as  $card) {
         }
     }
 }
+error_log('done');

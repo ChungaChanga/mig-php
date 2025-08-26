@@ -20,7 +20,7 @@ $config = new Braintree\Configuration([
     'publicKey' => getenv('PUBLIC_KEY'),
     'privateKey' => getenv('PRIVATE_KEY')
 ]);
-$config->timeout(10);
+$config->timeout(60);
 $gateway = new Braintree\Gateway($config);
 
 $appDbConn = new AppDb(getenv('APP_DB_DSN'), getenv('APP_DB_USER'), getenv('APP_DB_PASSWORD'));
@@ -63,4 +63,5 @@ foreach ($customers as  $customer) {
         }
     }
 }
+error_log('done');
 

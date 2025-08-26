@@ -56,3 +56,4 @@ foreach ($appDbConn->getRowIterator() as  $card) {
 
     $appDbConn->updateUpdateStatusAndComment($card['id'], $status, $result->message);
 }
+error_log('done');

@@ -38,3 +38,4 @@ foreach ($appDbConn->getRowIterator() as  $card) {
 
     $appDbConn->updateValidateStatusAndComment($card['id'], $status, $comment);
 }
+error_log('done');

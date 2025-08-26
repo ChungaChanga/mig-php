@@ -43,6 +43,7 @@ foreach ($appDbConn->getRowIterator() as  $card) {
     }
     $appDbConn->updateDlAddress($card['id'], $billingAddress->toJson());
 }
+error_log('done');
 
 function fetchBillingAddressFromOrderMeta(PDOStatement $stmt, string $ccToken): Address
 {

@@ -26,7 +26,7 @@ $gateway = new Braintree\Gateway($config);
 $appDbConn = new AppDb(getenv('APP_DB_DSN'), getenv('APP_DB_USER'), getenv('APP_DB_PASSWORD'));
 
 $customers = $gateway->customer()->search([
-    CustomerSearch::id()->startsWith(Customer::PREFIX),
+    CustomerSearch::id()->startsWith(Customer::getPrefix()),
 ]);
 
 foreach ($customers as  $customer) {

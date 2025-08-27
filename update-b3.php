@@ -21,13 +21,13 @@ $appDbConn = new AppDb(getenv('APP_DB_DSN'), getenv('APP_DB_USER'), getenv('APP_
 
 foreach ($appDbConn->getRowIterator() as  $card) {
     if ($card['validate_status'] != AppDb::STATUS_DONE ||
-        $card['update_b3_status'] == AppDb::STATUS_DONE) {
+        $card['update_b3_status'] != AppDb::STATUS_WAIT) {
         continue;
     }
     $address = Address::fromJson($card['dl_address']);
 
     $result = $gateway->paymentMethod()->update(
-        $address['token'], [
+        $card['token'], [
             'billingAddress' => [
                 'streetAddress' => $address->line1,
                 'locality' => $address->city,
@@ -42,18 +42,20 @@ foreach ($appDbConn->getRowIterator() as  $card) {
                 'extendedAddress' => null,
 
                 'options' => [
-                    'updateExisting' => true
+                    'updateExisting' => true,
                 ]
-            ]
+            ],
         ]
     );
 
+    $msg = null;
     if ($result->success) {
         $status = AppDb::STATUS_DONE;
     } else {
         $status = AppDb::STATUS_ERR;
+        $msg = $result->message;
     }
 
-    $appDbConn->updateUpdateStatusAndComment($card['id'], $status, $result->message);
+    $appDbConn->updateUpdateStatusAndComment($card['id'], $status, $msg);
 }
 error_log('done');

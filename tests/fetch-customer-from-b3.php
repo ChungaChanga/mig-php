@@ -17,7 +17,7 @@ $config = new Braintree\Configuration([
 $config->timeout(60);
 $gateway = new Braintree\Gateway($config);
 
-$customer = $gateway->customer()->find('dl-1000407');
+$customer = $gateway->customer()->find('dl-develop-9');
 $customer = $customer->toArray();
 $logger->log($customer);
 error_log(print_r($customer, 1));

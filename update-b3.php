@@ -42,7 +42,7 @@ foreach ($appDbConn->getRowIterator() as  $card) {
                 'extendedAddress' => null,
 
                 'options' => [
-                    'updateExisting' => true,
+                    'updateExisting' => false,
                 ]
             ],
         ]

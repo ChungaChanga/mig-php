@@ -4,7 +4,7 @@ use Andrey\PhpMig\Logger;
 
 require_once 'vendor/autoload.php';
 
-$logger = new Logger('log/fetch-payment-from-b3');
+$logger = new Logger('log/fetch-customer-from-b3');
 $dotenv = Dotenv\Dotenv::createUnsafeImmutable(dirname(__DIR__));
 $dotenv->safeLoad();
 
@@ -17,9 +17,7 @@ $config = new Braintree\Configuration([
 $config->timeout(60);
 $gateway = new Braintree\Gateway($config);
 
-$p = $gateway->paymentMethod()->find('ervdr612');
-$p = $p->toArray();
-$logger->log($p);
-error_log(print_r($p, 1));
+$res = $gateway->address()->delete('dl-develop-9', 'fd');
+$logger->log($res->success);
 
 

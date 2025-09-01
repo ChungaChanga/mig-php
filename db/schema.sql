@@ -10,3 +10,5 @@ create table cards(
     update_comment text null,
     unique index(token, customer_id)
 )
+
+create table test_cards like cards;

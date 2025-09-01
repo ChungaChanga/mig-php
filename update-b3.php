@@ -40,11 +40,10 @@ foreach ($appDbConn->getRowIterator() as  $card) {
                 'countryCodeNumeric' => null,
                 'countryName' => null,
                 'extendedAddress' => null,
-
-                'options' => [
-                    'updateExisting' => false,
-                ]
             ],
+            'options' => [
+                'verifyCard' => false,
+            ]
         ]
     );
 

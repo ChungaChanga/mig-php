@@ -18,9 +18,16 @@ foreach ($appDbConn->getRowIterator() as  $card) {
     if (!empty($card['b3_address'])) {
         $address = Address::fromJson($card['b3_address']);
         if ($address->isFull()) {
-            $appDbConn->updateUpdateStatusAndComment(
-                $card['id'], AppDb::STATUS_DONE, 'b3_address looks like filled'
-            );
+            $appDbConn->updateUpdateStatusAndComment($card['id'], AppDb::STATUS_DONE);
+            continue;
+        }
+    }
+    if (!empty($card['dl_address'])) {
+        $address = Address::fromJson($card['dl_address']);
+        if ($address->isFull()) {
+            $appDbConn->updateValidateStatusAndComment($card['id'], AppDb::STATUS_DONE);
+        } else {
+            $appDbConn->updateValidateStatusAndComment($card['id'], AppDb::STATUS_ERR, 'address is not full');
         }
     }
 }

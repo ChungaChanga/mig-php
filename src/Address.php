@@ -15,8 +15,8 @@ class Address {
     public ?string $filledBy = null;
 
     public function isFull(): bool {
-        return (!empty($this->line1) && !empty($this->city) && !empty($this->region)) ||
-            (!empty($this->line1) && !empty($this->postalCode));
+        return (!empty($this->line1) && !empty($this->city) &&
+                !empty($this->country)) && !empty($this->postalCode);
     }
 
 

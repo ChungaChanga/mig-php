@@ -10,9 +10,11 @@ class AppDb
     const STATUS_ERR = 'error';
     const STATUS_DONE = 'done';
     const STATUS_WAIT = 'wait';
+    private string $tableName;
 
     function __construct($dsn, $user, $pass)
     {
+        $this->tableName = getenv('APP_DB_TABLE');
         $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_PERSISTENT => true
@@ -33,7 +35,7 @@ class AppDb
     )
     {
         $sql = "
-    INSERT IGNORE INTO cards 
+    INSERT IGNORE INTO $this->tableName 
     (token, customer_id, b3_address, dl_address, validate_status, update_b3_status, validate_comment, update_comment) 
     VALUES 
     (:token, :customer_id, :b3_address, :dl_address, :validate_status, :update_b3_status, :validate_comment, :update_comment)";
@@ -61,9 +63,15 @@ class AppDb
     }
 
 
-    public function getRowIterator(): \Generator
+    public function getRowIterator(int $limit = null, int $offset = null): \Generator
     {
-        $sql = "SELECT * FROM cards";
+        $sql = "SELECT * FROM $this->tableName order by id";
+        if (!is_null($limit)) {
+            $sql .= " limit $limit";
+            if (!is_null($offset)) {
+                $sql .= " offset $offset";
+            }
+        }
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
 
@@ -75,7 +83,7 @@ class AppDb
 
     public function updateDlAddress($id, $address)
     {
-        $sql = "UPDATE cards SET dl_address = :dl_address WHERE id = :id";
+        $sql = "UPDATE $this->tableName SET dl_address = :dl_address WHERE id = :id";
 
         $stmt = $this->pdo->prepare($sql);
 
@@ -87,9 +95,9 @@ class AppDb
         $stmt->execute($values);
     }
 
-    public function updateValidateStatusAndComment($id, string $validateStatus, ?string $comment)
+    public function updateValidateStatusAndComment($id, string $validateStatus, ?string $comment = null)
     {
-        $sql = "UPDATE cards SET validate_status = :validate_status, validate_comment = :comment WHERE id = :id";
+        $sql = "UPDATE $this->tableName SET validate_status = :validate_status, validate_comment = :comment WHERE id = :id";
 
         $stmt = $this->pdo->prepare($sql);
 
@@ -104,7 +112,7 @@ class AppDb
 
     public function updateUpdateStatusAndComment($id, string $status, ?string $comment = null)
     {
-        $sql = "UPDATE cards SET update_b3_status = :update_b3_status, update_comment = :comment WHERE id = :id";
+        $sql = "UPDATE $this->tableName SET update_b3_status = :update_b3_status, update_comment = :comment WHERE id = :id";
 
         $stmt = $this->pdo->prepare($sql);
 

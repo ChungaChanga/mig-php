@@ -4,7 +4,7 @@ use Andrey\PhpMig\Logger;
 
 require_once 'vendor/autoload.php';
 
-$logger = new Logger('log/fetch-customer-from-b3');
+$logger = new Logger('fetch-customer-from-b3');
 $dotenv = Dotenv\Dotenv::createUnsafeImmutable(dirname(__DIR__));
 $dotenv->safeLoad();
 
@@ -17,7 +17,7 @@ $config = new Braintree\Configuration([
 $config->timeout(60);
 $gateway = new Braintree\Gateway($config);
 
-$customer = $gateway->customer()->find('dl-develop-9');
+$customer = $gateway->customer()->find('dl-1191235');
 $customer = $customer->toArray();
 $logger->log($customer);
 error_log(print_r($customer, 1));
